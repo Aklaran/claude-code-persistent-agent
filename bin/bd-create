@@ -1,0 +1,39 @@
+#!/bin/bash
+# bd-create — wrapper for `bd create` that enforces good descriptions
+# Requires: bd (go install github.com/codegangsta/beads/cmd/bd@latest)
+
+set -euo pipefail
+
+if ! command -v bd &>/dev/null; then
+  echo "Error: bd not found. Install: go install github.com/codegangsta/beads/cmd/bd@latest"
+  exit 1
+fi
+
+if [ $# -lt 1 ]; then
+  echo "Usage: bd-create <title>"
+  echo ""
+  echo "You'll be prompted for a description that answers:"
+  echo "  - WHY: Why does this need to happen?"
+  echo "  - WHAT: What specifically needs to change?"
+  echo "  - WHERE: Which files/modules are involved?"
+  echo "  - HOW: Any implementation notes or constraints?"
+  exit 1
+fi
+
+TITLE="$*"
+
+echo "Creating bead: $TITLE"
+echo ""
+echo "Write a description answering WHY/WHAT/WHERE/HOW."
+echo "Press Ctrl+D when done."
+echo "---"
+
+DESC=$(cat)
+
+if [ ${#DESC} -lt 20 ]; then
+  echo ""
+  echo "Error: Description too short. Answer WHY/WHAT/WHERE/HOW."
+  exit 1
+fi
+
+bd create "$TITLE" --description "$DESC"
