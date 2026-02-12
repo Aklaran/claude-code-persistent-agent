@@ -1,39 +1,146 @@
 #!/bin/bash
-# bd-create — wrapper for `bd create` that enforces good descriptions
-# Requires: bd (go install github.com/codegangsta/beads/cmd/bd@latest)
+# bd-create: Wrapper for bd create that enforces better bead quality
 
 set -euo pipefail
 
-if ! command -v bd &>/dev/null; then
+BD_PATH=$(command -v bd 2>/dev/null || echo "${HOME}/.local/bin/bd")
+if [ ! -x "$BD_PATH" ]; then
   echo "Error: bd not found. Install: go install github.com/codegangsta/beads/cmd/bd@latest"
   exit 1
 fi
 
-if [ $# -lt 1 ]; then
-  echo "Usage: bd-create <title>"
-  echo ""
-  echo "You'll be prompted for a description that answers:"
-  echo "  - WHY: Why does this need to happen?"
-  echo "  - WHAT: What specifically needs to change?"
-  echo "  - WHERE: Which files/modules are involved?"
-  echo "  - HOW: Any implementation notes or constraints?"
-  exit 1
+# Description template
+TEMPLATE='
+Good bead descriptions answer:
+- WHY does this need to be done?
+- WHAT specifically needs to change?
+- WHERE in the codebase? (files/modules affected)
+- HOW complex? (single file? multi-file? third-party API?)
+'
+
+show_help() {
+    echo "bd-create: Wrapper for bd create with required descriptions"
+    echo ""
+    echo "Usage: bd-create --title TITLE --description DESCRIPTION [options]"
+    echo ""
+    echo "Required flags:"
+    echo "  --description, -d    Description of the bead (REQUIRED)"
+    echo ""
+    echo "Common options:"
+    echo "  --title, -t          Title of the bead"
+    echo "  --type               Bead type (task, bug, feature, etc.)"
+    echo "  --priority, -p       Priority level"
+    echo ""
+    echo "$TEMPLATE"
+    echo ""
+    echo "Example:"
+    echo "  bd-create --title \"Fix login bug\" \\"
+    echo "    --description \"Users can't log in because the API endpoint changed. \\"
+    echo "                   Need to update auth.js to use /v2/auth instead of /v1/auth. \\"
+    echo "                   Single file change.\" \\"
+    echo "    --type bug --priority 1"
+    exit 0
+}
+
+# Check for --help
+for arg in "$@"; do
+    if [[ "$arg" == "--help" ]] || [[ "$arg" == "-h" ]]; then
+        show_help
+    fi
+done
+
+# Parse arguments to check for description
+has_description=false
+description_text=""
+title_text=""
+all_text=""
+
+i=0
+args=()
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --description|-d)
+            has_description=true
+            if [[ $# -gt 1 ]] && [[ ! "$2" =~ ^- ]]; then
+                description_text="$2"
+                all_text="$all_text $2"
+                args+=("$1" "$2")
+                shift 2
+            else
+                echo "Error: --description requires a value" >&2
+                exit 1
+            fi
+            ;;
+        --title)
+            if [[ $# -gt 1 ]] && [[ ! "$2" =~ ^- ]]; then
+                title_text="$2"
+                all_text="$all_text $2"
+                # Pass as positional arg (first in args) since bd create takes title positionally
+                args=("$2" "${args[@]}")
+                shift 2
+            else
+                echo "Error: --title requires a value" >&2
+                exit 1
+            fi
+            ;;
+        *)
+            args+=("$1")
+            shift
+            ;;
+    esac
+done
+
+# Require description
+if [[ "$has_description" == false ]]; then
+    echo "Error: --description (or -d) is required" >&2
+    echo "" >&2
+    echo "$TEMPLATE" >&2
+    echo "" >&2
+    echo "Example:" >&2
+    echo "  bd-create --title \"Fix login bug\" \\" >&2
+    echo "    --description \"Users can't log in because the API endpoint changed. \\" >&2
+    echo "                   Need to update auth.js to use /v2/auth instead of /v1/auth. \\" >&2
+    echo "                   Single file change.\" \\" >&2
+    echo "    --type bug --priority 1" >&2
+    exit 1
 fi
 
-TITLE="$*"
+# Call bd create with all arguments
+"$BD_PATH" create "${args[@]}"
 
-echo "Creating bead: $TITLE"
+# Suggest complexity tags based on keywords
 echo ""
-echo "Write a description answering WHY/WHAT/WHERE/HOW."
-echo "Press Ctrl+D when done."
-echo "---"
+echo "📋 Tag suggestions based on content:"
 
-DESC=$(cat)
+suggested=false
 
-if [ ${#DESC} -lt 20 ]; then
-  echo ""
-  echo "Error: Description too short. Answer WHY/WHAT/WHERE/HOW."
-  exit 1
+# Convert to lowercase for case-insensitive matching
+all_text_lower=$(echo "$all_text" | tr '[:upper:]' '[:lower:]')
+
+# Check for various keywords
+if [[ "$all_text_lower" =~ (api|upstream|third-party|dependency|external|vendor) ]]; then
+    echo "  • Consider tag: external-dep (mentions external dependencies/APIs)"
+    suggested=true
 fi
 
-bd create "$TITLE" --description "$DESC"
+if [[ "$all_text_lower" =~ (multi-file|refactor|cross-cutting|multiple files|across|codebase-wide) ]]; then
+    echo "  • Consider tag: multi-file (affects multiple files)"
+    suggested=true
+fi
+
+if [[ "$all_text_lower" =~ (test|tdd|coverage|spec|unit test|integration test) ]]; then
+    echo "  • Consider tag: needs-tests (testing-related)"
+    suggested=true
+fi
+
+if [[ "$all_text_lower" =~ (ci|deploy|docker|kubernetes|k8s|infrastructure|devops|build) ]]; then
+    echo "  • Consider tag: infrastructure (CI/deployment/infrastructure)"
+    suggested=true
+fi
+
+if [[ "$suggested" == false ]]; then
+    echo "  (no automatic suggestions - review manually)"
+fi
+
+echo ""
+echo "To add tags, use: bd tag <bead-id> <tag-name>"

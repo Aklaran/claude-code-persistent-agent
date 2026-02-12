@@ -18,12 +18,8 @@ if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
 fi
 cp "$SCRIPT_DIR/claude/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
 
-# Install settings.json (backup existing)
-if [ -f "$CLAUDE_DIR/settings.json" ]; then
-  echo "⚠️  Existing settings.json found. Backing up to settings.json.bak"
-  cp "$CLAUDE_DIR/settings.json" "$CLAUDE_DIR/settings.json.bak"
-fi
-cp "$SCRIPT_DIR/claude/settings.json" "$CLAUDE_DIR/settings.json"
+# Note: settings.json is NOT installed — it contains user-specific
+# permission allowlists. See Claude Code docs for configuration.
 
 # Install commands
 cp "$SCRIPT_DIR/claude/commands/"*.md "$CLAUDE_DIR/commands/"
