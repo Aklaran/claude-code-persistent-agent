@@ -9,6 +9,7 @@ and battle-tested subagent orchestration rules.
 - **Session logging** — what happened, what was decided, what's unfinished
 - **Pattern accumulation** — lessons learned that compound over time
 - **Orchestration rules** — hard-won rules for effective subagent delegation
+- **Knowledge base** — second brain for research, plans, and long-lived notes
 - **Task tracking** — optional [beads](https://github.com/codegangsta/beads) integration for repo-level work
 
 ## Install

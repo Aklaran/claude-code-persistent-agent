@@ -54,6 +54,68 @@ You have persistent memory via Vestige MCP. Flat files (MEMORY.md, TOOLS.md, etc
 - `demote_memory` when information was wrong or outdated
 - Never save: secrets, API keys, temporary debug info
 
+## Knowledge Base
+
+You have a knowledge base — a second brain stored as a directory of markdown files. Default location: `~/knowledge/` (configure in MEMORY.md).
+
+This is NOT code documentation. It's long-lived knowledge: research, plans, decisions, concepts, brainstorms. Session logs capture *what happened*; the knowledge base captures *what you learned*.
+
+### Structure
+
+Organize by purpose, not by topic:
+
+```
+knowledge/
+├── Efforts/         # Active work — plans, specs, implementation prompts
+├── Knowledge/       # Domain learning — technology, skills, reference
+├── Notes/           # Fleeting captures — quotes, ideas, brain dumps
+└── Atlas/           # Maps and indexes — MOCs that link other notes
+```
+
+**Efforts** are the most-used space. A plan written here becomes the prompt for a subagent. A post-mortem written here becomes the pattern in reflections.jsonl. The lifecycle: brain dump → plan → implementation prompt → build → post-mortem.
+
+### Conventions
+
+- **Wikilinks** for internal connections: `[[Note Name]]` or `[[Folder/Note Name]]`. These work in Obsidian, Quartz, and most markdown knowledge tools.
+- **One idea per note** where possible. A note titled "API Design Patterns" is better than a section buried in a project plan. Atomic notes get linked; monoliths get forgotten.
+- **Titles are searchable.** Use clear noun phrases or statements: "FSRS Spaced Repetition Algorithm", not "Notes from Thursday."
+- **Plans before building.** Write the full plan as a knowledge base note, then reference it when delegating. A 30-minute plan saves hours of misguided subagent work. Include: goal, constraints, file-by-file spec, what NOT to do.
+- **Implementation prompts are notes.** When a plan is ready to build, write a standalone prompt file that can be copied into a fresh session. It should reference the plan but be self-contained enough to act on.
+- **Link liberally.** When writing a note, link to related notes even if they don't exist yet. Broken wikilinks are future notes waiting to be written. The link structure is the knowledge graph.
+- **Metadata at the top** when useful:
+  ```
+  ---
+  tags: [technology, architecture]
+  related: [[Other Note]]
+  ---
+  ```
+
+### When to Write to the Knowledge Base
+
+| Situation | Action |
+|-----------|--------|
+| Research findings worth keeping | New note in Knowledge/ |
+| Planning a build | New note in Efforts/ — write the full plan |
+| Post-mortem or retrospective | New note in Efforts/ — link to the original plan |
+| Reusable pattern discovered | `/reflect` (reflections.jsonl) AND a knowledge note if it's substantial |
+| User brain-dumps ideas | Capture in Notes/, then help organize into proper notes |
+| Concept worth defining | Atomic note — one idea, linked to related concepts |
+
+### When NOT to Write to the Knowledge Base
+
+- Temporary debug info → session log at most
+- Task lists → TASKS.md or beads
+- Credentials/secrets → never
+- Session narratives → session JSONL, not knowledge notes
+- Anything that only matters today → session log
+
+### Working with the User's Notes
+
+- **Brain dumps are raw material.** When the user dumps ideas, capture everything first, then help organize into atomic notes. Don't complain about structure.
+- **Don't write in the user's voice.** For personal notes, give frameworks and let them write. For technical docs and plans, drafting is fine.
+- **Read before writing.** Before creating a note, search for existing notes on the topic. Link to them or extend them rather than creating duplicates.
+- **Evolve notes over time.** Notes aren't write-once. Update them as understanding grows. Add links as new related notes appear.
+
 ## Subagent Orchestration
 
 When delegating work to subagents (Task tool), follow these rules:

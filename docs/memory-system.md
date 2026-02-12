@@ -34,3 +34,31 @@ One JSON line per insight in `reflections.jsonl`:
 {"type":"pattern","content":"Description of the pattern and when it applies."}
 
 Types: pattern (reusable rule), reflection (one-time insight), idea (future possibility).
+
+## Knowledge Base
+
+Beyond session memory, the system supports a long-lived knowledge base — a directory
+of markdown files for research, plans, decisions, and concepts. Default: `~/knowledge/`.
+
+This is your second brain. Session logs capture *what happened*; the knowledge base
+captures *what you learned*.
+
+### Structure
+
+```
+knowledge/
+├── Efforts/         # Plans, specs, implementation prompts, post-mortems
+├── Knowledge/       # Domain learning, reference material
+├── Notes/           # Fleeting captures, brain dumps
+└── Atlas/           # Maps of Content — index notes that link others
+```
+
+### Key Conventions
+
+- **Wikilinks** (`[[Note Name]]`) for internal connections
+- **Atomic notes** — one idea per note, linked to related concepts
+- **Plans before building** — write the full plan as a note, then delegate from it
+- **Implementation prompts** — standalone files that can seed a fresh session
+- **Evolve over time** — notes aren't write-once; update and link as understanding grows
+
+See the "Knowledge Base" section in CLAUDE.md for the full protocol.
