@@ -14,7 +14,7 @@ and battle-tested subagent orchestration rules.
 ## Install
 
 ```bash
-git clone <repo>
+git clone git@github.com:Aklaran/claude-persistent-agent.git
 cd claude-persistent-agent
 ./install.sh
 ```
