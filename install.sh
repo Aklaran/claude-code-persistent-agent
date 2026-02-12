@@ -18,8 +18,12 @@ if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
 fi
 cp "$SCRIPT_DIR/claude/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
 
-# Note: settings.json is NOT installed — it contains user-specific
-# permission allowlists. See Claude Code docs for configuration.
+# Install settings.json (backup existing)
+if [ -f "$CLAUDE_DIR/settings.json" ]; then
+  echo "⚠️  Existing settings.json found. Backing up to settings.json.bak"
+  cp "$CLAUDE_DIR/settings.json" "$CLAUDE_DIR/settings.json.bak"
+fi
+cp "$SCRIPT_DIR/claude/settings.json" "$CLAUDE_DIR/settings.json"
 
 # Install commands
 cp "$SCRIPT_DIR/claude/commands/"*.md "$CLAUDE_DIR/commands/"
@@ -39,21 +43,57 @@ if [ ! -f "$CLAUDE_DIR/memory/reflections.jsonl" ]; then
   touch "$CLAUDE_DIR/memory/reflections.jsonl"
 fi
 
+# Install hooks
+mkdir -p "$CLAUDE_DIR/hooks"
+cp "$SCRIPT_DIR/claude/hooks/"*.sh "$CLAUDE_DIR/hooks/" 2>/dev/null
+chmod +x "$CLAUDE_DIR/hooks/"*.sh 2>/dev/null
+
+# Install TDD Guard custom instructions
+mkdir -p "$CLAUDE_DIR/tdd-guard/data"
+if [ ! -f "$CLAUDE_DIR/tdd-guard/data/instructions.md" ]; then
+  cp "$SCRIPT_DIR/claude/tdd-guard/data/instructions.md" "$CLAUDE_DIR/tdd-guard/data/"
+  echo "  Created TDD Guard custom instructions"
+else
+  echo "  Skipped TDD Guard instructions (already exists)"
+fi
+
 # Install bd-create
 cp "$SCRIPT_DIR/bin/bd-create" "$CLAUDE_DIR/bin/"
 chmod +x "$CLAUDE_DIR/bin/bd-create"
 
-# Check for bd
+# Check for external tools
+echo ""
+echo "Checking optional tools..."
+
 if command -v bd &>/dev/null; then
   echo "  ✓ bd (beads) found"
 else
-  echo "  ⚠️  bd (beads) not found."
-  echo "     Install: go install github.com/codegangsta/beads/cmd/bd@latest"
-  echo "     Or remove beads references from CLAUDE.md if you don't want task tracking."
+  echo "  ○ bd (beads) not found — go install github.com/codegangsta/beads/cmd/bd@latest"
+fi
+
+if command -v tdd-guard &>/dev/null; then
+  echo "  ✓ tdd-guard found"
+else
+  echo "  ○ tdd-guard not found — npm install -g tdd-guard"
+  echo "    Also install per-project reporter: pnpm add -D tdd-guard-vitest"
+fi
+
+if command -v recall &>/dev/null; then
+  echo "  ✓ recall found"
+else
+  echo "  ○ recall not found — brew install zippoxer/tap/recall (or cargo install)"
+fi
+
+if command -v vestige-mcp &>/dev/null; then
+  echo "  ✓ vestige-mcp found"
+else
+  echo "  ○ vestige-mcp not found — download from https://github.com/samvallad33/vestige/releases"
+  echo "    Then: claude mcp add vestige vestige-mcp -s user"
 fi
 
 echo ""
 echo "✅ Done! Next steps:"
 echo "   1. Edit ~/.claude/memory/MEMORY.md — tell Claude who you are"
 echo "   2. Edit ~/.claude/memory/TOOLS.md — document your infrastructure"
-echo "   3. Start claude and say hello"
+echo "   3. Install optional tools listed above (tdd-guard, recall, vestige)"
+echo "   4. Start claude and say hello"

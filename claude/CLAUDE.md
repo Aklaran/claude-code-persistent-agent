@@ -11,7 +11,48 @@ At the start of every conversation, read these files in order:
    (run: `cat ~/.claude/memory/sessions/$(date +%Y-%m-%d).jsonl 2>/dev/null || echo "No sessions today."`)
 5. Reflections: `~/.claude/memory/reflections.jsonl`
 
-After reading, internalize the content. Do not summarize it back. Greet the user and get to work.
+After reading, internalize the content. Do not summarize it back.
+
+6. Check Vestige for pending reminders: `intention(action="check")`
+   (That's it — no broad Vestige searches at startup. Use Vestige on demand during the session.)
+
+Greet the user and get to work.
+
+## Session Search
+
+To find past conversations, use the `recall` CLI:
+- `recall search "query"` — search past sessions from the command line
+- Results include session ID, timestamps, and message previews
+- For interactive browsing, tell the user to run `recall` directly
+
+## Vestige Memory System
+
+You have persistent memory via Vestige MCP. Flat files (MEMORY.md, TOOLS.md, etc.) are the source of truth for identity and infrastructure. Vestige is working memory and long-tail knowledge — used on demand during sessions, not at startup.
+
+### During Sessions — Automatic Saves (No Permission Needed)
+- **Bug fixes:** After solving a bug, `smart_ingest` with error message, root cause, solution
+- **User preferences:** When the user states a preference, save it
+- **Architectural decisions:** Use `codebase(action="remember_decision")` with rationale
+- **Code patterns:** Use `codebase(action="remember_pattern")` for recurring patterns
+- **Reflections:** When logging a reflection, ALSO `smart_ingest` it into Vestige (dual-write with reflections.jsonl)
+
+### During Sessions — On-Demand Search
+- Need context on a topic? → `search` query in Vestige
+- Debugging something that feels familiar? → search for past bug fixes
+- Don't search preemptively at startup — only when you need specific knowledge
+
+### Trigger Words
+| User Says | Action |
+|-----------|--------|
+| "Remember this" | `smart_ingest` immediately |
+| "I prefer..." / "I always..." | Save as preference |
+| "Remind me..." / "Next time..." | Create `intention` |
+| "This is important" | `smart_ingest` + `promote_memory` |
+
+### Memory Hygiene
+- `promote_memory` when a memory proves useful
+- `demote_memory` when information was wrong or outdated
+- Never save: secrets, API keys, temporary debug info
 
 ## Subagent Orchestration
 
@@ -51,7 +92,8 @@ Before planning work in a repo, check for `.beads/` directory. If present:
 
 ## Working Patterns
 
-- **TDD always.** Write failing tests first, then implement. No exceptions unless explicitly agreed.
+- **TDD always.** Write failing tests first, then implement. No exceptions unless explicitly agreed. TDD Guard hooks enforce this mechanically.
+- **Test real code, not copies.** Never copy-paste logic from the SUT into the test. Import and exercise the actual source. Mock boundaries (I/O, network, UI), not logic. Expected values should be hardcoded literals, not computed by the same algorithm as the SUT.
 - **Uncommitted code is lost code.** Commit working features before moving on.
 - **Research before coding.** Read existing docs before defaulting to code spikes.
 - **Plans before building.** Detailed plans make delegation efficient. Write the plan, then delegate.
