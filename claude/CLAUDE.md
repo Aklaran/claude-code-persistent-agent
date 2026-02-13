@@ -38,32 +38,74 @@ To find past conversations, use the `recall` CLI:
 
 ## Vestige Memory System
 
-You have persistent memory via Vestige MCP. Flat files (MEMORY.md, etc.) are the source of truth for identity. Vestige is working memory and long-tail knowledge — used on demand during sessions, not at startup.
+You have access to Vestige, a cognitive memory system. USE IT AUTOMATICALLY.
 
-### During Sessions — Automatic Saves (No Permission Needed)
-- **Bug fixes:** After solving a bug, `smart_ingest` with error message, root cause, solution
-- **User preferences:** When the user states a preference, save it
-- **Architectural decisions:** Use `codebase(action="remember_decision")` with rationale
-- **Code patterns:** Use `codebase(action="remember_pattern")` for recurring patterns
-- **Reflections:** When logging a reflection, ALSO `smart_ingest` it into Vestige (dual-write with reflections.jsonl)
+Flat files (MEMORY.md, etc.) are the source of truth for identity. Vestige is working memory and long-tail knowledge — used on demand during sessions, not at startup. The only startup call is `intention(action="check")` in the cold start above.
 
-### During Sessions — On-Demand Search
-- Need context on a topic? → `search` query in Vestige
-- Debugging something that feels familiar? → search for past bug fixes
-- Don't search preemptively at startup — only when you need specific knowledge
+### Automatic Saves — No Permission Needed
 
-### Trigger Words
+**After solving a bug or error** — IMMEDIATELY save with `smart_ingest`:
+- Content: "BUG FIX: [error message] | Root cause: [why] | Solution: [how]"
+- Tags: ["bug-fix", "project-name"]
+
+**After learning user preferences** — save without asking:
+- Coding style, libraries, communication preferences, project patterns
+
+**After architectural decisions** — use `codebase(action="remember_decision")`:
+- What was decided, why (rationale), alternatives considered, files affected
+
+**After discovering code patterns** — use `codebase(action="remember_pattern")`:
+- Pattern name, where it's used, how to apply it
+
+**After logging a reflection** — ALSO `smart_ingest` it into Vestige (dual-write with reflections.jsonl)
+
+### Trigger Words — Auto-Save When User Says:
+
 | User Says | Action |
 |-----------|--------|
 | "Remember this" | `smart_ingest` immediately |
-| "I prefer..." / "I always..." | Save as preference |
-| "Remind me..." / "Next time..." | Create `intention` |
+| "Don't forget" | `smart_ingest` with high priority |
+| "I always..." / "I never..." | Save as preference |
+| "I prefer..." / "I like..." | Save as preference |
 | "This is important" | `smart_ingest` + `promote_memory` |
+| "Remind me..." | Create `intention` |
+| "Next time..." | Create `intention` with context trigger |
+
+### Automatic Context Detection
+
+Search Vestige on demand when context would help:
+- **Working on a codebase** → search "[repo name] patterns decisions"
+- **User mentions a person** → search "[person name]"
+- **Debugging** → search "[error message keywords]" — check if solved before
+- **Technical question** → search Vestige before answering from scratch
 
 ### Memory Hygiene
-- `promote_memory` when a memory proves useful
-- `demote_memory` when information was wrong or outdated
-- Never save: secrets, API keys, temporary debug info
+
+**Promote** when: user confirms helpful, solution worked, info was accurate
+**Demote** when: user corrects mistake, info was wrong, memory led to bad outcome
+**Never save:** secrets/API keys, temporary debug info, trivial information
+
+### Proactive Behaviors
+
+DO automatically:
+- Save solutions after fixing problems
+- Note user corrections as preferences
+- Update project context after major changes
+- Create intentions for mentioned deadlines
+- Search before answering technical questions
+
+DON'T ask permission to:
+- Save bug fixes
+- Update preferences
+- Create reminders from explicit requests
+- Search for context
+
+### Memory Is Retrieval
+
+Every search strengthens memory (Testing Effect). Search liberally.
+When in doubt, search Vestige first. If nothing found, solve the problem, then save the solution.
+
+**Your memory fades like a human's. Use it or lose it.**
 
 ## Knowledge Base
 
