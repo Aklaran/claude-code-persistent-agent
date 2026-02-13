@@ -11,7 +11,6 @@ Three optional tools that enhance the persistent agent system.
 **How it integrates:**
 - Global hooks in `~/.claude/settings.json` (PreToolUse, UserPromptSubmit, SessionStart)
 - Custom instructions auto-created per-project at `.claude/tdd-guard/data/instructions.md` (from template)
-- Static analysis hook in `~/.claude/hooks/anti-copy-paste-test.sh` as a mechanical backstop
 - Subagents inherit global hooks — TDD is enforced at the tool level, not just the prompt
 
 **Per-project setup:** Each project needs a test reporter. For Vitest:
