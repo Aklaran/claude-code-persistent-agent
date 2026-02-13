@@ -22,7 +22,8 @@ cd claude-persistent-agent
 
 Then edit:
 - `~/.claude/memory/MEMORY.md` — tell Claude who you are
-- `~/.claude/memory/TOOLS.md` — document your infrastructure
+- `~/.claude/setup.md` — document your environment and services
+- `~/.claude/credentials.md` — how to retrieve credentials (flows, not secrets)
 
 ## Commands
 

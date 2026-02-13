@@ -5,18 +5,24 @@
 At the start of every conversation, read these files in order:
 
 1. `~/.claude/memory/MEMORY.md` — identity, boundaries, user context
-2. `~/.claude/memory/TOOLS.md` — infrastructure, credentials, services
-3. `~/.claude/memory/TASKS.md` — pending life/personal tasks
-4. Today's session log: `~/.claude/memory/sessions/$(date +%Y-%m-%d).jsonl`
+2. `~/.claude/memory/TASKS.md` — pending life/personal tasks
+3. Today's session log: `~/.claude/memory/sessions/$(date +%Y-%m-%d).jsonl`
    (run: `cat ~/.claude/memory/sessions/$(date +%Y-%m-%d).jsonl 2>/dev/null || echo "No sessions today."`)
-5. Reflections: `~/.claude/memory/reflections.jsonl`
+4. Reflections: `~/.claude/memory/reflections.jsonl`
 
 After reading, internalize the content. Do not summarize it back.
 
-6. Check Vestige for pending reminders: `intention(action="check")`
+5. Check Vestige for pending reminders: `intention(action="check")`
    (That's it — no broad Vestige searches at startup. Use Vestige on demand during the session.)
 
 Greet the user and get to work.
+
+## On-Demand Context
+
+These files are NOT loaded at startup. Read them only when you need them:
+
+- `~/.claude/setup.md` — environment, services, local setup quirks. Read when you need to know how something on this machine is configured.
+- `~/.claude/credentials.md` — credential retrieval flows (Bitwarden, 1Password, env vars, etc). Read when you need to authenticate with a service.
 
 ## Session Search
 
@@ -27,7 +33,7 @@ To find past conversations, use the `recall` CLI:
 
 ## Vestige Memory System
 
-You have persistent memory via Vestige MCP. Flat files (MEMORY.md, TOOLS.md, etc.) are the source of truth for identity and infrastructure. Vestige is working memory and long-tail knowledge — used on demand during sessions, not at startup.
+You have persistent memory via Vestige MCP. Flat files (MEMORY.md, etc.) are the source of truth for identity. Vestige is working memory and long-tail knowledge — used on demand during sessions, not at startup.
 
 ### During Sessions — Automatic Saves (No Permission Needed)
 - **Bug fixes:** After solving a bug, `smart_ingest` with error message, root cause, solution
