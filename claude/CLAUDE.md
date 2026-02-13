@@ -6,9 +6,14 @@ At the start of every conversation, read these files in order:
 
 1. `~/.claude/memory/MEMORY.md` — identity, boundaries, user context
 2. `~/.claude/memory/TASKS.md` — pending life/personal tasks
-3. Today's session log: `~/.claude/memory/sessions/$(date +%Y-%m-%d).jsonl`
-   (run: `cat ~/.claude/memory/sessions/$(date +%Y-%m-%d).jsonl 2>/dev/null || echo "No sessions today."`)
-4. Reflections: `~/.claude/memory/reflections.jsonl`
+3. Recent session logs (last 3 days):
+   ```bash
+   for f in $(ls -r ~/.claude/memory/sessions/*.jsonl 2>/dev/null | head -3); do echo "--- $(basename $f) ---"; cat "$f"; done
+   ```
+4. Recent reflections (last 30):
+   ```bash
+   tail -30 ~/.claude/memory/reflections.jsonl
+   ```
 
 After reading, internalize the content. Do not summarize it back.
 
