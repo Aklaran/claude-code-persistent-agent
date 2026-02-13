@@ -33,7 +33,7 @@ activation. Optional but recommended.
 - **At startup:** one `intention(action="check")` call for pending reminders
 - **During sessions:** auto-saves bug fixes, preferences, decisions, patterns
 - **On demand:** semantic search when context would help (debugging, codebase work, etc.)
-- **Dual-write:** reflections go to both `reflections.jsonl` and Vestige
+- **Reflections:** saved to `reflections.jsonl` (source of truth) and also ingested to Vestige when available
 
 Vestige is working memory. If it's not installed or its DB is lost, flat files
 still have everything essential.
@@ -86,8 +86,8 @@ One JSON line per insight in `reflections.jsonl`:
 
 Types: `pattern` (reusable rule), `reflection` (one-time insight), `idea` (future possibility).
 
-Last 30 are loaded at startup. Full file searchable via grep. Also dual-written
-to Vestige for semantic search and natural decay of stale patterns.
+Last 30 are loaded at startup. Full file searchable via grep. Also ingested
+to Vestige when available for semantic search and natural decay of stale patterns.
 
 ## How the Layers Relate
 

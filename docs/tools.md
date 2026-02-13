@@ -45,7 +45,7 @@ npm install -g tdd-guard
 
 **What it does:** Rust binary that indexes Claude Code session files. Full-text search across all past conversations. Interactive TUI for browsing and resuming sessions.
 
-**Why it matters:** Replaces the Pi-era `memory_search` extension. Searches Claude Code's native session format — works with all sessions, not just ones you logged manually.
+**Why it matters:** Full-text search across all past Claude Code sessions — not just ones you logged manually.
 
 **How it integrates:**
 - Standalone CLI, no configuration needed

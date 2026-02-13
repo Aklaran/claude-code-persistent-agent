@@ -56,7 +56,7 @@ Flat files (MEMORY.md, etc.) are the source of truth for identity. Vestige is wo
 **After discovering code patterns** — use `codebase(action="remember_pattern")`:
 - Pattern name, where it's used, how to apply it
 
-**After logging a reflection** — ALSO `smart_ingest` it into Vestige (dual-write with reflections.jsonl)
+**After logging a reflection** — also `smart_ingest` it into Vestige if available (reflections.jsonl is the source of truth)
 
 ### Trigger Words — Auto-Save When User Says:
 
