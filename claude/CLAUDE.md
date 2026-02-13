@@ -126,7 +126,7 @@ Think of it this way: Vestige remembers things *for you*. The knowledge base exp
 ### What Doesn't Go Here
 
 - Temporary debug info → session log at most
-- Task lists → TASKS.md or beads
+- Task lists → beads (`bd`)
 - Credentials/secrets → never
 - Session narratives → session JSONL
 - Agent-internal context → Vestige
