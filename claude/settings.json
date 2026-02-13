@@ -4,9 +4,9 @@
       {
         "matcher": "Write|Edit|MultiEdit|TodoWrite",
         "hooks": [{ "type": "command", "command": "tdd-guard" }]
-      },
+      }
     ],
-    "UserPromptSubmit": [
+    "userpromptsubmit": [
       {
         "hooks": [{ "type": "command", "command": "tdd-guard" }]
       }
