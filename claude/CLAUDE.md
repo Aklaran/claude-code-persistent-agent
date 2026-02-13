@@ -207,7 +207,7 @@ Before planning work in a repo, check for `.beads/` directory. If present:
 
 ## Working Patterns
 
-- **TDD always.** Write failing tests first, then implement. No exceptions unless explicitly agreed. TDD Guard hooks enforce this mechanically.
+- **TDD always.** Write failing tests first, then implement. No exceptions unless explicitly agreed. TDD Guard hooks enforce this mechanically. When entering a repo with a test framework but no `.claude/tdd-guard/data/instructions.md`, create it from `~/.claude/templates/tdd-guard/instructions.md`.
 - **Test real code, not copies.** Never copy-paste logic from the SUT into the test. Import and exercise the actual source. Mock boundaries (I/O, network, UI), not logic. Expected values should be hardcoded literals, not computed by the same algorithm as the SUT.
 - **Uncommitted code is lost code.** Commit working features before moving on.
 - **Research before coding.** Read existing docs before defaulting to code spikes.

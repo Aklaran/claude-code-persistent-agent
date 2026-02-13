@@ -58,14 +58,9 @@ mkdir -p "$CLAUDE_DIR/hooks"
 cp "$SCRIPT_DIR/claude/hooks/"*.sh "$CLAUDE_DIR/hooks/" 2>/dev/null
 chmod +x "$CLAUDE_DIR/hooks/"*.sh 2>/dev/null
 
-# Install TDD Guard custom instructions
-mkdir -p "$CLAUDE_DIR/tdd-guard/data"
-if [ ! -f "$CLAUDE_DIR/tdd-guard/data/instructions.md" ]; then
-  cp "$SCRIPT_DIR/claude/tdd-guard/data/instructions.md" "$CLAUDE_DIR/tdd-guard/data/"
-  echo "  Created TDD Guard custom instructions"
-else
-  echo "  Skipped TDD Guard instructions (already exists)"
-fi
+# Install templates (for agent to copy into projects as needed)
+mkdir -p "$CLAUDE_DIR/templates/tdd-guard"
+cp "$SCRIPT_DIR/templates/tdd-guard/instructions.md" "$CLAUDE_DIR/templates/tdd-guard/"
 
 # Install bd-create
 cp "$SCRIPT_DIR/bin/bd-create" "$CLAUDE_DIR/bin/"
