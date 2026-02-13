@@ -10,7 +10,6 @@ vector stores — just files that Claude reads at the start of each conversation
 | File | Purpose | Updated by |
 |------|---------|------------|
 | MEMORY.md | Identity, boundaries, user context | You (manually) |
-| TASKS.md | Life/personal tasks | You or agent |
 | sessions/YYYY-MM-DD.jsonl | Daily session logs (last 3 days loaded) | Agent (/log-session) |
 | reflections.jsonl | Patterns and lessons (last 30 loaded) | Agent (/reflect) |
 

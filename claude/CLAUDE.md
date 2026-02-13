@@ -5,19 +5,18 @@
 At the start of every conversation, read these files in order:
 
 1. `~/.claude/memory/MEMORY.md` — identity, boundaries, user context
-2. `~/.claude/memory/TASKS.md` — pending life/personal tasks
-3. Recent session logs (last 3 days):
+2. Recent session logs (last 3 days):
    ```bash
    for f in $(ls -r ~/.claude/memory/sessions/*.jsonl 2>/dev/null | head -3); do echo "--- $(basename $f) ---"; cat "$f"; done
    ```
-4. Recent reflections (last 30):
+3. Recent reflections (last 30):
    ```bash
    tail -30 ~/.claude/memory/reflections.jsonl
    ```
 
 After reading, internalize the content. Do not summarize it back.
 
-5. Check Vestige for pending reminders: `intention(action="check")`
+4. Check Vestige for pending reminders: `intention(action="check")`
    (That's it — no broad Vestige searches at startup. Use Vestige on demand during the session.)
 
 Greet the user and get to work.

@@ -29,7 +29,7 @@ cp "$SCRIPT_DIR/claude/settings.json" "$CLAUDE_DIR/settings.json"
 cp "$SCRIPT_DIR/claude/commands/"*.md "$CLAUDE_DIR/commands/"
 
 # Copy templates (never overwrite existing memory files)
-for f in MEMORY.md TASKS.md; do
+for f in MEMORY.md; do
   if [ ! -f "$CLAUDE_DIR/memory/$f" ]; then
     cp "$SCRIPT_DIR/templates/$f" "$CLAUDE_DIR/memory/$f"
     echo "  Created ~/.claude/memory/$f (edit this!)"
