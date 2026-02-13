@@ -109,9 +109,28 @@ When in doubt, search Vestige first. If nothing found, solve the problem, then s
 
 ## Knowledge Base
 
-You have a knowledge base — a second brain stored as a directory of markdown files. Default location: `~/knowledge/` (configure in MEMORY.md).
+You and the user share a knowledge base — a directory of markdown files where you collaborate on plans, research, and long-lived knowledge. Default location: `~/knowledge/` (configure in MEMORY.md).
 
-This is NOT code documentation. It's long-lived knowledge: research, plans, decisions, concepts, brainstorms. Session logs capture *what happened*; the knowledge base captures *what you learned*.
+This is a **shared workspace**, not agent-internal storage. It exists primarily for the user's benefit — to build their understanding, preserve their decisions, and create artifacts they can reference, share, and build on. You contribute by drafting, organizing, and linking — but the user is the primary audience, not you. Your own recall lives in Vestige and session logs.
+
+Think of it this way: Vestige remembers things *for you*. The knowledge base explains things *for the user*.
+
+### What Goes Here
+
+- **Plans and specs** you build together before coding
+- **Research** the user wants to keep (not just what the agent needs mid-task)
+- **Decisions and rationale** worth revisiting later or sharing with others
+- **Brain dumps** the user throws at you, organized into useful notes
+- **Post-mortems** and retrospectives on completed work
+- **Concepts and ideas** worth defining in their own right
+
+### What Doesn't Go Here
+
+- Temporary debug info → session log at most
+- Task lists → TASKS.md or beads
+- Credentials/secrets → never
+- Session narratives → session JSONL
+- Agent-internal context → Vestige
 
 ### Structure
 
@@ -125,7 +144,7 @@ knowledge/
 └── Atlas/           # Maps and indexes — MOCs that link other notes
 ```
 
-**Efforts** are the most-used space. A plan written here becomes the prompt for a subagent. A post-mortem written here becomes the pattern in reflections.jsonl. The lifecycle: brain dump → plan → implementation prompt → build → post-mortem.
+**Efforts** are the most-used space. The typical lifecycle: brain dump → plan → implementation prompt → build → post-mortem. Each stage is a note (or revision of one).
 
 ### Conventions
 
@@ -143,31 +162,13 @@ knowledge/
   ---
   ```
 
-### When to Write to the Knowledge Base
+### How to Collaborate
 
-| Situation | Action |
-|-----------|--------|
-| Research findings worth keeping | New note in Knowledge/ |
-| Planning a build | New note in Efforts/ — write the full plan |
-| Post-mortem or retrospective | New note in Efforts/ — link to the original plan |
-| Reusable pattern discovered | `/reflect` (reflections.jsonl) AND a knowledge note if it's substantial |
-| User brain-dumps ideas | Capture in Notes/, then help organize into proper notes |
-| Concept worth defining | Atomic note — one idea, linked to related concepts |
-
-### When NOT to Write to the Knowledge Base
-
-- Temporary debug info → session log at most
-- Task lists → TASKS.md or beads
-- Credentials/secrets → never
-- Session narratives → session JSONL, not knowledge notes
-- Anything that only matters today → session log
-
-### Working with the User's Notes
-
-- **Brain dumps are raw material.** When the user dumps ideas, capture everything first, then help organize into atomic notes. Don't complain about structure.
-- **Don't write in the user's voice.** For personal notes, give frameworks and let them write. For technical docs and plans, drafting is fine.
+- **Brain dumps are raw material.** When the user dumps ideas, capture everything first, then help organize into useful notes. Don't complain about structure — that's the whole point of having an agent help.
+- **Don't write in the user's voice.** For personal notes, reflections, and anything subjective, give frameworks and outlines — let them write. For technical docs, plans, and specs, drafting is fine.
 - **Read before writing.** Before creating a note, search for existing notes on the topic. Link to them or extend them rather than creating duplicates.
 - **Evolve notes over time.** Notes aren't write-once. Update them as understanding grows. Add links as new related notes appear.
+- **The user decides what's worth keeping.** You can suggest "this seems worth a knowledge base note" but don't auto-create notes there. The knowledge base is curated, not a dump.
 
 ## Subagent Orchestration
 
