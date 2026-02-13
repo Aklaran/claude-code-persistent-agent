@@ -218,7 +218,7 @@ Before planning work in a repo, check for `.beads/` directory. If present:
 
 ## Session Logging
 
-Log once per session, at the end. Use `/log-session` command.
+Log once per session, at the end.
 
 Format (one JSON line per session):
 {"date":"YYYY-MM-DD","session":"<title>","time":"HH:MM","summary":"<compressed>","decisions":["<why>"],"artifacts":["<files>"],"open_threads":["<unfinished>"]}
@@ -226,4 +226,4 @@ Format (one JSON line per session):
 Rules:
 - One compressed summary, not blow-by-blow
 - If nothing meaningful happened, don't log
-- Discoveries and patterns go in `/reflect`, not the session log
+- Discoveries and patterns go in reflections.jsonl, not the session log

@@ -29,10 +29,6 @@ Then edit:
 
 | Command | What it does |
 |---------|-------------|
-| `/reflect` | Log a pattern, reflection, or idea |
-| `/log-session` | Summarize and log current session |
-| `/beads` | Show ready work from bead databases |
-| `/status` | Quick orientation (tasks + today's log) |
 | `/review` | Open neovim in tmux split for live review |
 
 ## How It Works

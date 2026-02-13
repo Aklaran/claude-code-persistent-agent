@@ -10,8 +10,8 @@ vector stores — just files that Claude reads at the start of each conversation
 | File | Purpose | Updated by |
 |------|---------|------------|
 | MEMORY.md | Identity, boundaries, user context | You (manually) |
-| sessions/YYYY-MM-DD.jsonl | Daily session logs (last 3 days loaded) | Agent (/log-session) |
-| reflections.jsonl | Patterns and lessons (last 30 loaded) | Agent (/reflect) |
+| sessions/YYYY-MM-DD.jsonl | Daily session logs (last 3 days loaded) | Agent |
+| reflections.jsonl | Patterns and lessons (last 30 loaded) | Agent |
 
 ### Loaded On Demand
 
@@ -25,8 +25,8 @@ vector stores — just files that Claude reads at the start of each conversation
 1. CLAUDE.md tells Claude to read the memory files at conversation start
 2. Claude internalizes the content and knows who you are, what you're working on
 3. When the agent needs environment or credential info, it reads the on-demand files
-4. At session end, /log-session captures what happened
-5. /reflect captures reusable patterns across sessions
+4. At session end, the agent logs a summary to the session JSONL
+5. Patterns and lessons go in reflections.jsonl
 6. Next session, Claude reads the new logs and picks up where you left off
 
 ## Session Log Format
